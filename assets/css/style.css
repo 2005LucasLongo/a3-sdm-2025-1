@@ -1,0 +1,144 @@
+:root {
+    --primary-color: #1976D2;
+    --secondary-color: #4CAF50;
+    --error-color: #D32F2F;
+    --background-color: #F5F5F5;
+    --card-hover: #E3F2FD;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.card:hover {
+    background: var(--card-hover);
+    transform: translateY(-2px);
+}
+
+.card.selected {
+    border-color: var(--secondary-color);
+    background: var(--card-hover);
+}
+
+button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background: #BDBDBD;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.form-group {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px 0;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.8rem;
+    margin-top: 4px;
+    display: none;
+}
+
+input.error {
+    border-color: var(--error-color);
+    background: #FFEBEE;
+}
+
+.qrcode-placeholder {
+    width: 200px;
+    height: 200px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.status-screen {
+    text-align: center;
+    padding: 40px;
+}
+
+.status-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.success {
+    color: var(--secondary-color);
+}
+
+.error {
+    color: var(--error-color);
+}
