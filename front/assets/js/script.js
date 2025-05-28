@@ -1,5 +1,44 @@
-function selecionaCarrinho(){
-    if (!document.querySelector('.card.selected')) {
+let carrinhoSelecionado = null;
+
+let dadosReserva = {
+    carrinho: null,
+    pessoa: null
+};
+
+// Função que busca os carrinhos no backend
+async function carregarCarrinhos() {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/carrinhos');
+        const carrinhos = await response.json();
+
+        const container = document.getElementById('cardsContainer');
+        container.innerHTML = '';
+
+        carrinhos.forEach(carrinho => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.textContent = `${carrinho.nome} / ${carrinho.setor}`;
+
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                carrinhoSelecionado = carrinho;
+                dadosReserva.carrinho = carrinho;
+                document.getElementById('nextButton').disabled = false;
+            });
+
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar carrinhos:', error);
+        alert('Erro ao carregar carrinhos. Tente novamente mais tarde.');
+    }
+}
+
+window.addEventListener('load', carregarCarrinhos);
+
+function selecionaCarrinho() {
+    if (!carrinhoSelecionado) {
         alert('Selecione um carrinho antes de continuar!');
         return;
     }
@@ -11,18 +50,17 @@ function nextScreen(screenId) {
         screen.classList.remove('active');
     });
     document.getElementById(screenId).classList.add('active');
+
+    if (screenId === 'successScreen') {
+        enviarReserva();
+    }
 }
 
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', function () {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-        this.classList.add('selected');
-        document.getElementById('nextButton').disabled = false;
-    });
-});
+// =========================
+// Validação de CPF
+// =========================
 
 function validateCPF(cpf) {
-    
     cpf = cpf.replace(/\D/g, '');
     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
 
@@ -41,9 +79,15 @@ function validateCPF(cpf) {
     return true;
 }
 
+// =========================
+// Captura dos dados
+// =========================
+
 function submitForm() {
     const nome = document.getElementById('nome').value.trim();
-    const cpf = document.getElementById('cpf').value;
+    const cpf = document.getElementById('cpf').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+
     let isValid = true;
 
     if (nome === '') {
@@ -64,8 +108,48 @@ function submitForm() {
         document.getElementById('cpfError').style.display = 'none';
     }
 
-    if (isValid) nextScreen('successScreen');
+    if (!isValid) return;
+
+    // Salvar dados da pessoa
+    dadosReserva.pessoa = {
+        nome: nome,
+        cpf: cpf,
+        telefone: telefone
+    };
+
+    nextScreen('successScreen');
 }
+
+// =========================
+// Envio da reserva para backend
+// =========================
+
+async function enviarReserva() {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/reserva', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosReserva)
+        });
+
+        if (response.ok) {
+            const resultado = await response.json();
+            console.log('Reserva enviada com sucesso:', resultado);
+        } else {
+            console.error('Erro ao enviar reserva:', response.status);
+            nextScreen('errorScreen');
+        }
+    } catch (error) {
+        console.error('Erro de conexão:', error);
+        nextScreen('errorScreen');
+    }
+}
+
+// =========================
+// Máscara de CPF e Telefone
+// =========================
 
 document.getElementById('cpf').addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
@@ -83,6 +167,10 @@ document.getElementById('telefone').addEventListener('input', function (e) {
                  .substring(0, 16);
     e.target.value = value;
 });
+
+// =========================
+// Validação ao perder foco
+// =========================
 
 document.getElementById('cpf').addEventListener('blur', function () {
     if (!validateCPF(this.value)) {
