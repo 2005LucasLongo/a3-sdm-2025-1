@@ -5,55 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aluguel de Carrinhos</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css" />
-</head>
+    <link rel="stylesheet" href="style.css"></head>
 <body>
-    <!-- Tela 1: Seleção de Carrinho -->
     <div class="container screen active" id="screen1">
         <h1>Selecione um Carrinho</h1>
-        <div class="cards-container" id="cardsContainer">
-            <!-- Os cards serão gerados dinamicamente aqui -->
-        </div>
+        <div class="cards-container">
+        <table>
+            <tr>
+                <th></th>
+                <th>Carrinho</th>
+                <th>Setor</th>
+            </tr>
+            <tr>
+                <td><button id="C1">Selecionar</button></td>
+                <td>CAR001</td>
+                <td>Setor A</td>
+            </tr>
+            <tr>
+                <td><button id="C2">Selecionar</button></td>
+                <td>CAR002</td>
+                <td>Setor B</td>
+            </tr>
+            <tr>
+                <td><button id="C3">Selecionar</button></td>
+                <td>CAR003</td>
+                <td>Setor C</td>
+            </tr>
+            <tr>
+                <td><button id="C4">Selecionar</button></td>
+                <td>CAR004</td>
+                <td>Setor D</td>
+            </tr>
+        </table>
+            </div>
         <button id="nextButton" onclick="selecionaCarrinho()" disabled>PRÓXIMO</button>
     </div>
 
     <!-- Tela 2: Cadastro de Pessoa -->
-    <div class="container screen" id="screen2">
-        <h1>Dados do Usuário</h1>
-        <div class="form-group">
-            <input type="text" placeholder="Nome Completo" id="nome" required />
-            <div class="error-message" id="nomeError">Nome é obrigatório</div>
+
+    <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="container screen" id="screen2">
+            <h1 style="text-align: center;">Preencha seus dados:</h1>
+                <div class="form-group">
+                    <label for="nome">Nome Completo:</label>
+                    <input type="text" placeholder="    " id="nome" required />
+                    <div class="error-message" id="nomeError" style="display: none;">Nome é obrigatório</div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">CPF:</label>
+                    <input type="text" placeholder="    " id="cpf" maxlength="14" required />
+                    <div class="error-message" id="cpfError" style="display: none;">CPF inválido:</div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Telefone: (Opcional)</label>
+                    <input type="tel" placeholder="     " id="telefone" maxlength="16" />
+                </div>
+                <div class="form-group">
+                    <button id="submitButton" onclick="submitForm()">CONFIRMAR</button>
+                </div>
+               
+            </div>
         </div>
-        <div class="form-group">
-            <input type="text" placeholder="CPF" id="cpf" maxlength="14" required />
-            <div class="error-message" id="cpfError">CPF inválido</div>
-        </div>
-        <div class="form-group">
-            <input type="tel" placeholder="Telefone (Opcional)" id="telefone" maxlength="16" />
-        </div>
-        <button id="submitButton" onclick="submitForm()" >CONFIRMAR</button>
+
     </div>
+    
 
     <!-- Tela 3: QR Code -->
-    <div class="container screen" id="screen3">
-        <h1>Escaneie o QR Code</h1>
-        <div class="qrcode-placeholder">
-            <span class="material-icons">qr_code_2</span>
+
+
+    <div id="myModal1" class="modal1">
+        <!-- Modal content -->
+        <div class="modal-content1">
+            <div class="container screen" id="screen3">
+                <h1 style="text-align: center;">Escaneie o QR Code</h1>
+                <div class="qrcode-placeholder">
+                    <img src="https://tse2.mm.bing.net/th?id=OIP.-9N4K3Syg-OgbET8dgDwqAHaHa&pid=Api&P=0&h=180" onclick="sucesso()" id="image" alt="">
+                </div>
+            </div>
         </div>
-        <p>Aguardando confirmação...</p>
     </div>
 
     <!-- Telas de Status -->
-    <div class="container screen status-screen" id="successScreen">
-        <span class="material-icons status-icon success">check_circle</span>
-        <h2>Operação realizada com sucesso!</h2>
+
+    <div id="myModal2" class="modal2">
+        <!-- Modal content -->
+        <div class="modal-content2">
+            <div id="successScreen">
+                <span class="material-icons status-icon success">check_circle</span>
+                <h2>Operação realizada com sucesso!</h2>
+            </div>
+        </div>
     </div>
 
-    <div class="container screen status-screen" id="errorScreen">
+
+    <!-- <div class="container screen status-screen" id="errorScreen">
         <span class="material-icons status-icon error">error</span>
         <h2>Ocorreu um erro! Tente novamente.</h2>
-    </div>
+    </div> -->
 
-    <script src="assets/js/script.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
